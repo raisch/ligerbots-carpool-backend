@@ -39,7 +39,7 @@ server {
 }
 ```
 
-After saving the bootstrap config, test and reload Nginx:
+After saving the bootstrap config to /etc/nginx/http.d/admin.carpool.ligerbots.org.conf, test and reload Nginx:
 
 ```bash
 sudo nginx -t
