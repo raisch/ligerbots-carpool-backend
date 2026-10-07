@@ -66,12 +66,12 @@ npm run service:start
 npm run service:stop
 npm run service:restart
 npm run extensions:install
-npm run directus:schema:backup
-npm run db:backup
-npm run db:restore
+npm run directus:schema:backup - backs up directus schema to ./schema.yaml
+npm run db:backup - saves current state of db to ./backup.sql
+npm run db:restore - restores db from ./backup.sql
 npm run nginx:start
 npm run nginx:stop
-npm run nginx:reload
+npm run nginx:reload - runs config test and reloads service
 ```
 
 The `nginx:*` scripts are intended for Alpine hosts that use OpenRC and have Nginx installed on the host system.

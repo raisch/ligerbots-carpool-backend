@@ -5,6 +5,7 @@
   "main": "index.js",
   "config": {
     "bin_dir": "./bin",
+    "docker-compose": "docker compose",
     "extensions_dir":"./extensions",
     "extensions_tmp_dir":"./tmp/extensions",
     "db_user": "directus",
@@ -15,14 +16,16 @@
   "scripts": {
     "env": "env",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "service:start": "docker-compose up -d",
-    "service:stop": "docker-compose down",
+
+    "service:start": "${npm_package_config_docker-compose} up -d",
+    "service:stop": "${npm_package_config_docker-compose} down",
     "service:restart":"npm run service:stop && npm run service:start",
+
     "extensions:remove": "cd ${npm_package_config_extensions_dir} && rm -rf *",
     "extensions:extract": "cd ${npm_package_config_extensions_dir}  && tar xzf ../${npm_package_config_extensions_tmp_dir}/directus-extension-photos.tgz",
     "extensions:install": "npm run extensions:remove && npm run extensions:extract",
     
-    "directus:schema:backup": "docker exec -it directus npx directus schema snapshot > schema.yaml",
+    "directus:schema:backup": "docker exec -it directus npx directus schema snapshot 1>schema.yaml",
 
     "db:backup": "docker exec -t database pg_dump -h ${npm_package_config_db_host} -U ${npm_package_config_db_user} -d ${npm_package_config_db_name} --no-owner --no-privileges 1>backup.sql",
     "db:restore": "cat backup.sql | docker exec -i database psql -h ${npm_package_config_db_host} -U ${npm_package_config_db_user} -d ${npm_package_config_db_name}",
