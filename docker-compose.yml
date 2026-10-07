@@ -1,0 +1,94 @@
+version: '3.2'
+services:
+  database:
+    container_name: database
+    restart: always
+    image: postgis/postgis:13-master
+    networks:
+      - directus
+    volumes:
+      - ./database:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: 'directus'
+      POSTGRES_PASSWORD: 'directus'
+      POSTGRES_DB: 'directus'
+    healthcheck:
+      test: ["CMD", "pg_isready", "--host=localhost", "--username=directus"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_interval: 5s
+      start_period: 30s
+
+  cache:
+    container_name: cache
+    restart: always
+    image: redis:6
+    networks:
+      - directus
+    healthcheck:
+      test: ["CMD-SHELL", "[ $$(redis-cli ping) = 'PONG' ]"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_interval: 5s
+      start_period: 30s
+
+  directus:
+    container_name: directus
+    restart: always
+    image: directus/directus:11.1.0
+    networks:
+      - directus
+    ports:
+      - 8055:8055
+    volumes:
+      - ./database:/directus/database
+      - ./uploads:/directus/uploads
+      - ./extensions:/directus/extensions
+      - ./templates:/directus/templates
+    depends_on:
+      cache:
+        condition: service_healthy
+      database:
+        condition: service_healthy
+    environment:
+      SECRET: '49c5a389-4a7e-487f-93b4-892d775f43aa'
+
+      PUBLIC_URL: 'http://ligerbots.4msg.net:8055'
+
+      DB_CLIENT: 'pg'
+      DB_HOST: 'database'
+      DB_PORT: '5432'
+      DB_DATABASE: 'directus'
+      DB_USER: 'directus'
+      DB_PASSWORD: 'directus'
+
+      CACHE_ENABLED: 'true'
+      CACHE_AUTO_PURGE: 'true'
+      CACHE_STORE: 'redis'
+      REDIS: 'redis://cache:6379'
+
+      ADMIN_EMAIL: 'raisch@gmail.com'
+      ADMIN_PASSWORD: 'Osc4rB00'
+
+      EMAIL_VERIFY_SETUP: 'true'
+      EMAIL_FROM: 'no-reply@4msg.net'
+      EMAIL_TRANSPORT: 'mailgun'
+
+      EMAIL_MAILGUN_API_KEY: '8c5d80b69a3c84cee4952bf33865c0b4-7a3af442-b162fb2b'
+      EMAIL_MAILGUN_DOMAIN: 'mail.4msg.net'
+
+      CORS_ENABLED: true
+      CORS_ORIGIN: true      
+
+      WEBSOCKETS_ENABLED: true
+
+      CONTENT_SECURITY_POLICY_DIRECTIVES__FRAME_SRC: 'https://docs.google.com https://giphy.com'
+      CONTENT_SECURITY_POLICY_FRAME_SRC: 'https://docs.google.com https://giphy.com'
+      CONTENT_SECURITY_POLICY_IMG_SRC: "'self' data: blob: https://raw.githubusercontent.com https://avatars.githubusercontent.com https://giphy.com"
+
+networks:
+  directus:
+
+#    image: directus/directus:v9.0.0-rc.24

@@ -1,0 +1,23 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Automation for Ligerbots Backend (running Directus)",
+  "main": "index.js",
+  "config": {
+    "bin_dir": "./bin",
+    "extensions_dir":"./extensions",
+    "extensions_tmp_dir":"./tmp/extensions"
+  },
+  "scripts": {
+    "env": "env",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "service:start": "docker-compose up -d",
+    "service:stop": "docker-compose down",
+    "service:restart":"npm run service:stop && npm run service:start",
+    "extensions:remove": "cd ${npm_package_config_extensions_dir} && rm -rf *",
+    "extensions:extract": "cd ${npm_package_config_extensions_dir}  && tar xzf ../${npm_package_config_extensions_tmp_dir}/directus-extension-photos.tgz",
+    "extensions:install": "npm run extensions:remove && npm run extensions:extract" 
+  },
+  "author": "Rob Raisch <raisch@gmail.com>",
+  "license": "ISC"
+}
