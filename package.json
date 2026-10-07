@@ -23,7 +23,9 @@
     "extensions:install": "npm run extensions:remove && npm run extensions:extract",
     "directus:schema:backup": "docker exec -it directus npx directus schema snapshot > schema.yaml",
     "db:backup": "docker exec -t database pg_dump -h ${npm_package_config_db_host} -U ${npm_package_config_db_user} -d ${npm_package_config_db_name} --no-owner --no-privileges 1>backup.sql",
-    "db:restore": "cat backup.sql | docker exec -i database psql -h ${npm_package_config_db_host} -U ${npm_package_config_db_user} -d ${npm_package_config_db_name}"
+    "db:restore": "cat backup.sql | docker exec -i database psql -h ${npm_package_config_db_host} -U ${npm_package_config_db_user} -d ${npm_package_config_db_name}",
+    "nginx:test": "nginx -t",
+    "nginx:reload": "nginx -s reload"
   },
   "author": "Rob Raisch <raisch@gmail.com>",
   "license": "ISC"

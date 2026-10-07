@@ -70,7 +70,7 @@ services:
       REDIS: 'redis://cache:6379'
 
       ADMIN_EMAIL: 'raisch@gmail.com'
-      ADMIN_PASSWORD: 'Osc4rB00'
+      ADMIN_PASSWORD: 'SuperSecretPassword'
 
       EMAIL_VERIFY_SETUP: 'true'
       EMAIL_FROM: 'no-reply@4msg.net'
