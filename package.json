@@ -1,12 +1,16 @@
 {
-  "name": "backend",
+  "name": "ligerbots-carpool-backend",
   "version": "1.0.0",
-  "description": "Automation for Ligerbots Backend (running Directus)",
+  "description": "Automation for Ligerbots Backend (running Directus over PostGreSQL)",
   "main": "index.js",
   "config": {
     "bin_dir": "./bin",
     "extensions_dir":"./extensions",
-    "extensions_tmp_dir":"./tmp/extensions"
+    "extensions_tmp_dir":"./tmp/extensions",
+    "db_user": "directus",
+    "db_password": "directus",
+    "db_name": "directus",
+    "db_host": "localhost"
   },
   "scripts": {
     "env": "env",
@@ -16,7 +20,10 @@
     "service:restart":"npm run service:stop && npm run service:start",
     "extensions:remove": "cd ${npm_package_config_extensions_dir} && rm -rf *",
     "extensions:extract": "cd ${npm_package_config_extensions_dir}  && tar xzf ../${npm_package_config_extensions_tmp_dir}/directus-extension-photos.tgz",
-    "extensions:install": "npm run extensions:remove && npm run extensions:extract" 
+    "extensions:install": "npm run extensions:remove && npm run extensions:extract",
+    "directus:schema:backup": "docker exec -it directus npx directus schema snapshot > schema.yaml",
+    "db:backup": "docker exec -t database pg_dump -h ${npm_package_config_db_host} -U ${npm_package_config_db_user} -d ${npm_package_config_db_name} --no-owner --no-privileges 1>backup.sql",
+    "db:restore": "cat backup.sql | docker exec -i database psql -h ${npm_package_config_db_host} -U ${npm_package_config_db_user} -d ${npm_package_config_db_name}"
   },
   "author": "Rob Raisch <raisch@gmail.com>",
   "license": "ISC"
