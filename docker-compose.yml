@@ -76,7 +76,7 @@ services:
       EMAIL_FROM: 'no-reply@4msg.net'
       EMAIL_TRANSPORT: 'mailgun'
 
-      EMAIL_MAILGUN_API_KEY: '8c5d80b69a3c84cee4952bf33865c0b4-7a3af442-b162fb2b'
+      EMAIL_MAILGUN_API_KEY:'REPLACE ME'
       EMAIL_MAILGUN_DOMAIN: 'mail.4msg.net'
 
       CORS_ENABLED: true
